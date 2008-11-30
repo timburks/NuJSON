@@ -1,4 +1,4 @@
-(load "JSON")
+(load "NuJSON")
 
 (class TestExamples is NuTestCase
      
