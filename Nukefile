@@ -22,7 +22,7 @@
 (set @framework_identifier   "nu.programming.json")
 (set @framework_creator_code "????")
 
-(set @cflags "-g -std=gnu99 -I Source")
+(set @cflags "-g -fobjc-gc -std=gnu99 -I Source")
 (set @ldflags "-framework Foundation")
 
 (compilation-tasks)
