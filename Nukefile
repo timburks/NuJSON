@@ -17,13 +17,26 @@
 ;; source files
 (set @m_files     (filelist "^objc/.*.m$"))
 
+(set SYSTEM ((NSString stringWithShellCommand:"uname") chomp))
+
+(case SYSTEM
+      ("Darwin"
+               (set @cflags "-g -std=gnu99")
+               (set @ldflags "-framework Foundation"))
+      ("Linux"
+              (set @arch (list "i386"))
+              (set gnustep_flags ((NSString stringWithShellCommand:"gnustep-config --objc-flags") chomp))
+              (set gnustep_libs ((NSString stringWithShellCommand:"gnustep-config --base-libs") chomp))
+              (set @cflags "-g -std=gnu99 -DLINUX -I/usr/local/include #{gnustep_flags}")
+              (set @ldflags "#{gnustep_libs}"))
+      (else nil))
+
+
 ;; framework description
 (set @framework "NuJSON")
 (set @framework_identifier   "nu.programming.json")
 (set @framework_creator_code "????")
 
-(set @cflags "-g -fobjc-gc -std=gnu99 -I Source")
-(set @ldflags "-framework Foundation")
 
 (compilation-tasks)
 (framework-tasks)

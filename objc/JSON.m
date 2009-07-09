@@ -193,7 +193,14 @@ static char ctrl[0x22];
     depth++;
 
     BOOL addComma = NO;
+
+#ifdef DARWIN
     for (id value in fragment) {
+#else
+    for (int i = 0; i < [fragment count]; i++) {
+        id value = [fragment objectAtIndex:i];
+#endif
+
         if (addComma)
             [json appendString:@","];
         else
@@ -222,10 +229,15 @@ static char ctrl[0x22];
     NSString *colon = [self humanReadable] ? @" : " : @":";
     BOOL addComma = NO;
     NSArray *keys = [fragment allKeys];
-    if (self.sortKeys)
+    if ([self sortKeys])
         keys = [keys sortedArrayUsingSelector:@selector(compare:)];
 
+#ifdef DARWIN
     for (id value in keys) {
+#else
+    for (int i = 0; i < [keys count]; i++) {
+        id value = [keys objectAtIndex:i];
+#endif
         if (addComma)
             [json appendString:@","];
         else
@@ -739,9 +751,41 @@ static char ctrl[0x22];
     return !*c;
 }
 
+#ifdef DARWIN
 @synthesize humanReadable;
 @synthesize sortKeys;
 @synthesize maxDepth;
+#else
+- (BOOL) humanReadable
+{
+    return humanReadable;
+}
+
+- (void) setHumanReadable:(BOOL) newHumanReadable
+{
+    humanReadable = newHumanReadable;
+}
+
+- (BOOL) sortKeys
+{
+    return sortKeys;
+}
+
+- (void) setSortKeys:(BOOL) newSortKeys
+{
+    sortKeys = newSortKeys;
+}
+
+- (NSUInteger) maxDepth
+{
+    return maxDepth;
+}
+
+- (void) setMaxDepth:(NSUInteger) newMaxDepth
+{
+    maxDepth = newMaxDepth;
+}
+#endif
 
 @end
 

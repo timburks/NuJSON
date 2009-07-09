@@ -1,5 +1,13 @@
 (load "NuJSON")
 
+
+(if (eq (uname) "Linux")
+     (then
+          (set NSASCIIStringEncoding 1)
+          (class NSString 
+               (+ (id) stringWithContentsOfFile:(id)path encoding:(int)encoding error:(id)error is
+                    (self stringWithContentsOfFile:path)))))
+
 (class TestExamples is NuTestCase
      
      (- testJsonOrg is
@@ -25,7 +33,7 @@
                (assert_equal expected (((expected JSONRepresentation) JSONValue)))))
      
      (- testRFC4627 is
-        (set dir "Tests/rfc4627")
+        (set dir "test/rfc4627")
         (set files ((NSFileManager defaultManager) enumeratorAtPath:dir))
         (while (set file (files nextObject))
                (unless ((file pathExtension) isEqualToString:"json")

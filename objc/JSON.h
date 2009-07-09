@@ -115,15 +115,30 @@ anything else not in the JSON specification.
  JSON with linebreaks after each array value and dictionary key/value pair, indented two
  spaces per nesting level.
  */
+#ifdef DARWIN
 @property BOOL humanReadable;
+#else
+- (BOOL) humanReadable;
+- (void) setHumanReadable:(BOOL)humanReadable;
+#endif
 
 /// Whether or not to sort the dictionary keys in the output
 /** The default is to not sort the keys. */
+#ifdef DARWIN
 @property BOOL sortKeys;
+#else
+- (BOOL) sortKeys;
+- (void) setSortKeys:(BOOL)sortKeys;
+#endif
 
 /// The maximum depth the parser will go to
 /** Defaults to 512. */
+#ifdef DARWIN
 @property NSUInteger maxDepth;
+#else
+- (NSUInteger) maxDepth;
+- (void) setMaxDepth:(NSUInteger)maxDepth;
+#endif
 
 /// Return JSON representation of an array  or dictionary
 - (NSString*)stringWithObject:(id)value error:(NSError**)error;
