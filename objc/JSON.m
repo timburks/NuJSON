@@ -686,6 +686,8 @@ static char ctrl[0x22];
 {
     const char *ns = c;
 
+    BOOL looksLikeAnInteger = YES;
+
     // The logic to test for validity of the number formatting is relicensed
     // from JSON::XS with permission from its author Marc Lehmann.
     // (Available at the CPAN: http://search.cpan.org/dist/JSON-XS/ .)
@@ -711,6 +713,7 @@ static char ctrl[0x22];
 
     // Fractional part
     if ('.' == *c && c++) {
+        looksLikeAnInteger = NO;
 
         if (!isdigit(*c)) {
             *error = err(EPARSENUM, @"No digits after decimal point");
@@ -721,6 +724,8 @@ static char ctrl[0x22];
 
     // Exponential part
     if ('e' == *c || 'E' == *c) {
+        looksLikeAnInteger = NO;
+
         c++;
 
         if ('-' == *c || '+' == *c)
@@ -738,8 +743,13 @@ static char ctrl[0x22];
         encoding:NSUTF8StringEncoding
         freeWhenDone:NO];
     [str autorelease];
-    if (str && (*o = [NSDecimalNumber decimalNumberWithString:str]))
-        return YES;
+    if (!looksLikeAnInteger) {
+        if (str && (*o = [NSDecimalNumber decimalNumberWithString:str]))
+            return YES;
+    } else {
+        if (str && (*o = [NSNumber numberWithLong:atol([str cStringUsingEncoding:NSUTF8StringEncoding])]))
+            return YES;
+    }
 
     *error = err(EPARSENUM, @"Failed creating decimal instance");
     return NO;
