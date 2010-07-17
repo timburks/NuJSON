@@ -21,6 +21,7 @@
 
 (case SYSTEM
       ("Darwin"
+               (set @arch (list "x86_64" "i386"))
                (set @cflags "-g -std=gnu99")
                (set @ldflags "-framework Foundation"))
       ("Linux"
