@@ -180,6 +180,16 @@ static char ctrl[0x22];
         [json appendString:@"null"];
 
     }
+    else if ([fragment isKindOfClass:[NSDate class]]) {
+        [json appendString:@"\""];
+        [json appendString:[fragment description]];
+        [json appendString:@"\""];
+    }
+    else if ([fragment respondsToSelector:@selector(stringValue)]) {
+        [json appendString:@"\""];
+        [json appendString:[fragment stringValue]];
+        [json appendString:@"\""];
+    }
     else {
         *error = err(EUNSUPPORTED, [NSString stringWithFormat:@"JSON serialisation not supported for %@", [fragment class]]);
         return NO;
